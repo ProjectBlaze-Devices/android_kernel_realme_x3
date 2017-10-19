@@ -257,6 +257,7 @@ cbq_classify(struct sk_buff *skb, struct Qdisc *sch, int *qerr)
 			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
 		case TC_ACT_SHOT:
 			return NULL;
+			/* fall through */
 		case TC_ACT_RECLASSIFY:
 			return cbq_reclassify(skb, cl);
 		}
