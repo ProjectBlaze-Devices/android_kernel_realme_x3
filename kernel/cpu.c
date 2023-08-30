@@ -31,6 +31,7 @@
 #include <linux/slab.h>
 #include <linux/percpu-rwsem.h>
 #include <uapi/linux/sched/types.h>
+#include <linux/highmem.h>
 #include <linux/cpuset.h>
 
 #include <trace/events/power.h>
