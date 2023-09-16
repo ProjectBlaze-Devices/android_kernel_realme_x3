@@ -28,6 +28,7 @@
 #define MAIN_BOARD_SUPPORT 256
 
 static struct proc_dir_entry *g_parent = NULL;
+static bool lcd_registered = false;
 struct device_info {
 	struct device *dev;
 	struct pinctrl *p_ctrl;
@@ -222,6 +223,17 @@ int register_device_proc(char *name, char *version, char *vendor)
 	info = (struct manufacture_info *) kzalloc(sizeof(*info), GFP_KERNEL);
 	if (!info) {
 		return -ENOMEM;
+	}
+
+	// Check if the name contains "lcd"
+	bool is_lcd_device = strstr(name, "lcd") != NULL;
+
+	if (is_lcd_device && lcd_registered) {
+		kfree(info);
+		return 0;
+	}
+	if (is_lcd_device) {
+		lcd_registered = true;
 	}
 
 	if (version) {
