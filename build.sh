@@ -114,8 +114,14 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
     log "${GREEN}Completed in $ELAPSED_MINUTES minute(s) and $ELAPSED_SECONDS second(s)!${NC}"
 
     # Upload the zip file
-    curl --upload-file $OUT_DIR/$ZIPNAME http://transfer.sh
-    log "${GREEN}Upload complete.${NC}"
+    upload_url=$(curl -F "file=@$OUT_DIR/$ZIPNAME" https://file.io/?expires=7d) # Set expiration to 7 days
+    
+    # Extract the file download URL from the response
+    download_url=$(echo "$upload_url" | jq -r '.link')
+
+    # Display the download URL
+    log "${YELLOW}Uploaded ZIP file: $download_url${NC}"
+
     log "${YELLOW}The zip file will be saved in the following directory:${GREEN} $OUT_DIR/$ZIPNAME"
 else
     log "${RED}Compilation failed!${NC}"
